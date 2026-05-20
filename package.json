@@ -1,0 +1,38 @@
+{
+  "name": "lemme",
+  "version": "0.1.0",
+  "description": "Natural language to shell commands, powered by Claude, OpenAI, or Groq",
+  "type": "module",
+  "bin": {
+    "lemme": "./src/index.js"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "keywords": [
+    "ai",
+    "cli",
+    "shell",
+    "terminal",
+    "natural-language",
+    "claude",
+    "openai",
+    "groq"
+  ],
+  "author": "arii",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ary-na/lemme.git"
+  },
+  "homepage": "https://github.com/ary-na/lemme#readme",
+  "dependencies": {}
+}
