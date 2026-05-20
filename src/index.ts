@@ -8,6 +8,10 @@ import { getCommand } from "./ai.js";
 import { confirmAndRun } from "./runner.js";
 import { showConfig, resetConfig } from "./configCmd.js";
 import { saveHistory, showHistory } from "./history.js";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
 
 const args = process.argv.slice(2);
 const query = args.join(" ").trim();
@@ -19,9 +23,15 @@ if (!query) {
   console.log("  " + chalk.cyan("lemme config --show"));
   console.log("  " + chalk.cyan("lemme config --reset"));
   console.log("  " + chalk.cyan("lemme history"));
+  console.log("  " + chalk.cyan("lemme --version"));
   console.log(chalk.dim("\nExample:"));
   console.log("  " + chalk.dim("lemme push my branch to origin\n"));
-  process.exit(1);
+  process.exit(0);
+}
+
+if (query === "--version" || query === "-v") {
+  console.log(chalk.cyan(`lemme v${version}`));
+  process.exit(0);
 }
 
 if (query === "config") {
