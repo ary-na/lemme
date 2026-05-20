@@ -23,7 +23,7 @@ export async function runSetup(): Promise<void> {
 
   // provider
   console.log(chalk.bold("Which AI provider do you want to use?"));
-  console.log(chalk.dim("  1.") + " Claude " + chalk.dim("(Anthropic)"));
+  console.log(chalk.dim("  1.") + " Claude");
   console.log(chalk.dim("  2.") + " OpenAI");
   console.log(chalk.dim("  3.") + " Groq");
 
