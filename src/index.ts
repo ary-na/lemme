@@ -6,6 +6,8 @@ import { runSetup } from "./setup.js";
 import { readConfig } from "./config.js";
 import { getCommand } from "./ai.js";
 import { confirmAndRun } from "./runner.js";
+import { showConfig, resetConfig } from "./configCmd.js";
+import { saveHistory, showHistory } from "./history.js";
 
 const args = process.argv.slice(2);
 const query = args.join(" ").trim();
@@ -14,6 +16,9 @@ if (!query) {
   console.log(chalk.bold("\nUsage:"));
   console.log("  " + chalk.cyan("lemme <what you want to do>"));
   console.log("  " + chalk.cyan("lemme config"));
+  console.log("  " + chalk.cyan("lemme config --show"));
+  console.log("  " + chalk.cyan("lemme config --reset"));
+  console.log("  " + chalk.cyan("lemme history"));
   console.log(chalk.dim("\nExample:"));
   console.log("  " + chalk.dim("lemme push my branch to origin\n"));
   process.exit(1);
@@ -21,6 +26,21 @@ if (!query) {
 
 if (query === "config") {
   await runSetup();
+  process.exit(0);
+}
+
+if (query === "config --show") {
+  showConfig();
+  process.exit(0);
+}
+
+if (query === "config --reset") {
+  await resetConfig();
+  process.exit(0);
+}
+
+if (query === "history") {
+  showHistory();
   process.exit(0);
 }
 
@@ -43,3 +63,7 @@ if (command.startsWith("ERROR:")) {
 }
 
 await confirmAndRun(command);
+
+if (config.history) {
+  saveHistory(query, command);
+}
