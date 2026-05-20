@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import chalk from "chalk";
+import ora from "ora";
 import { runSetup } from "./setup.js";
 import { readConfig } from "./config.js";
 import { getCommand } from "./ai.js";
@@ -32,8 +33,9 @@ if (!config) {
   process.exit(1);
 }
 
-console.log(chalk.dim("\nThinking..."));
+const spinner = ora({ text: chalk.dim("Thinking..."), color: "cyan" }).start();
 const command = await getCommand(query, config);
+spinner.stop();
 
 if (command.startsWith("ERROR:")) {
   console.error(chalk.red(`\n✖ ${command}\n`));
