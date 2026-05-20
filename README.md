@@ -92,7 +92,7 @@ lemme history
 
 | Provider | Models |
 |----------|--------|
-| Claude (Anthropic) | `claude-sonnet-4-20250514` |
+| Claude | `claude-sonnet-4-20250514` |
 | OpenAI | `gpt-4o` |
 | Groq | `llama-3.3-70b-versatile` |
 
