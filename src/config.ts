@@ -1,0 +1,43 @@
+import { homedir } from "os";
+import { join } from "path";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+
+export type Provider = "claude" | "openai" | "groq";
+
+export interface Config {
+  provider: Provider;
+  apiKey: string;
+  model: string;
+}
+
+const CONFIG_DIR = join(homedir(), ".config", "lemme");
+const CONFIG_PATH = join(CONFIG_DIR, "config.json");
+
+export function readConfig(): Config | null {
+  if (!existsSync(CONFIG_PATH)) return null;
+
+  try {
+    const raw = readFileSync(CONFIG_PATH, "utf-8");
+    return JSON.parse(raw) as Config;
+  } catch {
+    return null;
+  }
+}
+
+export function writeConfig(config: Config): void {
+  if (!existsSync(CONFIG_DIR)) {
+    mkdirSync(CONFIG_DIR, { recursive: true });
+  }
+  writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
+}
+
+export function getDefaultModel(provider: Provider): string {
+  switch (provider) {
+    case "claude":
+      return "claude-sonnet-4-20250514";
+    case "openai":
+      return "gpt-4o";
+    case "groq":
+      return "llama-3.3-70b-versatile";
+  }
+}
