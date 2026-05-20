@@ -4,18 +4,19 @@
   "description": "Natural language to shell commands, powered by Claude, OpenAI, or Groq",
   "type": "module",
   "bin": {
-    "lemme": "./src/index.js"
+    "lemme": "./dist/index.js"
   },
   "files": [
-    "src/",
+    "dist/",
     "README.md"
   ],
   "engines": {
     "node": ">=18"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "build": "tsc"
   },
   "keywords": [
     "ai",
@@ -34,5 +35,9 @@
     "url": "git+https://github.com/ary-na/lemme.git"
   },
   "homepage": "https://github.com/ary-na/lemme#readme",
-  "dependencies": {}
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3"
+  }
 }
