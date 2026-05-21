@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import Groq from "groq-sdk";
+import { GoogleGenAI } from "@google/genai";
 import chalk from "chalk";
 import { type Config } from "./config.js";
 
@@ -22,6 +23,8 @@ export async function getCommand(
         return await askOpenAI(query, config);
       case "groq":
         return await askGroq(query, config);
+      case "gemini":
+        return await askGemini(query, config);
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
@@ -67,4 +70,17 @@ async function askGroq(query: string, config: Config): Promise<string> {
     ],
   });
   return response.choices[0]?.message?.content?.trim() ?? "";
+}
+
+async function askGemini(query: string, config: Config): Promise<string> {
+  const client = new GoogleGenAI({ apiKey: config.apiKey });
+  const response = await client.models.generateContent({
+    model: config.model,
+    contents: query,
+    config: {
+      systemInstruction: SYSTEM_PROMPT,
+      maxOutputTokens: 256,
+    },
+  });
+  return response.text?.trim() ?? "";
 }

@@ -23,16 +23,18 @@ export async function runSetup(): Promise<void> {
 
   // provider
   console.log(chalk.bold("Which AI provider do you want to use?"));
-  console.log(chalk.dim("  1.") + " Claude");
+  console.log(chalk.dim("  1.") + " Claude " + chalk.dim("(Anthropic)"));
   console.log(chalk.dim("  2.") + " OpenAI");
   console.log(chalk.dim("  3.") + " Groq");
+  console.log(chalk.dim("  4.") + " Gemini " + chalk.dim("(Google)"));
 
-  const providerChoice = await prompt(rl, chalk.cyan("\nEnter 1, 2 or 3: "));
+  const providerChoice = await prompt(rl, chalk.cyan("\nEnter 1, 2, 3 or 4: "));
 
   const providerMap: Record<string, Provider> = {
     "1": "claude",
     "2": "openai",
     "3": "groq",
+    "4": "gemini",
   };
 
   const provider = providerMap[providerChoice.trim()];

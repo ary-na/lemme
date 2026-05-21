@@ -2,7 +2,7 @@ import { homedir, platform } from "os";
 import { join } from "path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 
-export type Provider = "claude" | "openai" | "groq";
+export type Provider = "claude" | "openai" | "groq" | "gemini";
 export type Shell = "zsh" | "bash" | "fish";
 export type OS = "macos" | "linux" | "windows";
 
@@ -44,6 +44,8 @@ export function getDefaultModel(provider: Provider): string {
       return "gpt-4o";
     case "groq":
       return "llama-3.3-70b-versatile";
+    case "gemini":
+      return "gemini-2.0-flash";
   }
 }
 
