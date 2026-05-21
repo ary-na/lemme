@@ -1,6 +1,6 @@
 # 🤖 lemme
 
-> Natural language to shell commands, powered by Claude, OpenAI, or Groq.
+> Natural language to shell commands, powered by Claude, OpenAI, Groq, or Gemini.
 
 [![npm version](https://img.shields.io/npm/v/lemme?color=black&style=flat-square)](https://www.npmjs.com/package/lemme)
 [![npm downloads](https://img.shields.io/npm/dm/lemme?color=black&style=flat-square)](https://www.npmjs.com/package/lemme)
@@ -84,17 +84,22 @@ lemme config --reset
 
 # view command history
 lemme history
+
+# print installed version
+lemme --version
+lemme -v
 ```
 
 ---
 
 ## Providers
 
-| Provider | Models |
-|----------|--------|
-| Claude | `claude-sonnet-4-20250514` |
-| OpenAI | `gpt-4o` |
-| Groq | `llama-3.3-70b-versatile` |
+| Provider           | Model                      |
+| ------------------ | -------------------------- |
+| Claude (Anthropic) | `claude-sonnet-4-20250514` |
+| OpenAI             | `gpt-4o`                   |
+| Groq               | `llama-3.3-70b-versatile`  |
+| Gemini (Google)    | `gemini-2.0-flash`         |
 
 The default model is set automatically based on your chosen provider during setup.
 
@@ -104,15 +109,15 @@ The default model is set automatically based on your chosen provider during setu
 
 Stored at `~/.config/lemme/config.json`:
 
-| Field | Description | Default |
-|-------|-------------|---------|
-| `provider` | AI provider to use | set during setup |
-| `apiKey` | API key for your provider | set during setup |
-| `model` | Model to use | provider default |
-| `shell` | Your shell (`zsh`, `bash`, `fish`) | auto-detected |
-| `os` | Your OS (`macos`, `linux`, `windows`) | auto-detected |
-| `autoRun` | Skip confirmation and run immediately | `false` |
-| `history` | Save commands to `~/.config/lemme/history.json` | `false` |
+| Field      | Description                                     | Default          |
+| ---------- | ----------------------------------------------- | ---------------- |
+| `provider` | AI provider to use                              | set during setup |
+| `apiKey`   | API key for your provider                       | set during setup |
+| `model`    | Model to use                                    | provider default |
+| `shell`    | Your shell (`zsh`, `bash`, `fish`)              | auto-detected    |
+| `os`       | Your OS (`macos`, `linux`, `windows`)           | auto-detected    |
+| `autoRun`  | Skip confirmation and run immediately           | `false`          |
+| `history`  | Save commands to `~/.config/lemme/history.json` | `false`          |
 
 ---
 
@@ -157,7 +162,7 @@ lemme history
 ## Requirements
 
 - Node.js `>=18`
-- An API key from [Anthropic](https://console.anthropic.com), [OpenAI](https://platform.openai.com), or [Groq](https://console.groq.com)
+- An API key from [Anthropic](https://console.anthropic.com), [OpenAI](https://platform.openai.com), [Groq](https://console.groq.com), or [Google AI Studio](https://aistudio.google.com)
 
 ---
 
