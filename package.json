@@ -1,6 +1,6 @@
 {
   "name": "lemme",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Natural language to shell commands, powered by Claude, OpenAI, or Groq",
   "type": "module",
   "bin": {
