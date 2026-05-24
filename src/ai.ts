@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import OpenAI from "openai";
 import Groq from "groq-sdk";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import chalk from "chalk";
 import { type Config } from "./config.js";
 
@@ -73,14 +73,11 @@ async function askGroq(query: string, config: Config): Promise<string> {
 }
 
 async function askGemini(query: string, config: Config): Promise<string> {
-  const client = new GoogleGenAI({ apiKey: config.apiKey });
-  const response = await client.models.generateContent({
+  const client = new GoogleGenerativeAI(config.apiKey);
+  const model = client.getGenerativeModel({
     model: config.model,
-    contents: query,
-    config: {
-      systemInstruction: SYSTEM_PROMPT,
-      maxOutputTokens: 256,
-    },
+    systemInstruction: SYSTEM_PROMPT,
   });
-  return response.text?.trim() ?? "";
+  const response = await model.generateContent(query);
+  return response.response.text().trim();
 }
