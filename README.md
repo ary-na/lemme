@@ -50,7 +50,7 @@ npm install -g lemme
 lemme config
 ```
 
-Walks you through choosing your AI provider, entering your API key, and configuring your shell and preferences. Config is saved to `~/.config/lemme/config.json`.
+A step-by-step wizard (`[1/5]`, `[2/5]`, …) walks you through choosing your AI provider, entering your API key, and configuring your shell and preferences. Your shell and OS are auto-detected. Config is saved to `~/.config/lemme/config.json`.
 
 ---
 
@@ -66,7 +66,7 @@ lemme compress all logs older than 7 days
 lemme show me what changed in the last commit
 ```
 
-lemme will show you the generated command and ask for confirmation before running anything.
+lemme shows the generated command and asks for confirmation before running anything. Press Enter or `y` to run, `n` to cancel.
 
 ---
 
@@ -94,7 +94,7 @@ lemme -v
 
 ## Providers
 
-| Provider           | Model                      |
+| Provider           | Default model              |
 | ------------------ | -------------------------- |
 | Claude (Anthropic) | `claude-sonnet-4-20250514` |
 | OpenAI             | `gpt-4o`                   |
@@ -117,7 +117,7 @@ Stored at `~/.config/lemme/config.json`:
 | `shell`    | Your shell (`zsh`, `bash`, `fish`)              | auto-detected    |
 | `os`       | Your OS (`macos`, `linux`, `windows`)           | auto-detected    |
 | `autoRun`  | Skip confirmation and run immediately           | `false`          |
-| `history`  | Save commands to `~/.config/lemme/history.json` | `false`          |
+| `history`  | Save commands to `~/.config/lemme/history.json` | `true`           |
 
 ---
 
@@ -125,21 +125,23 @@ Stored at `~/.config/lemme/config.json`:
 
 ```
 1. you type    →  lemme push my branch to origin
-2. lemme reads →  ~/.config/lemme/config.json
-3. lemme asks  →  your AI provider with a strict system prompt
+2. lemme reads →  ~/.config/lemme/config.json (shell, OS, provider)
+3. lemme asks  →  your AI provider, with your shell and OS as context
 4. AI returns  →  git push origin my-branch
-5. lemme shows →  Command: git push origin my-branch
-6. you confirm →  Run it? (y/n)
-7. lemme runs  →  ✔ done
+5. lemme shows →  $ git push origin my-branch
+6. you confirm →  Run it? [Y/n]   (Enter = yes)
+7. lemme runs  →  ✔  Done.
 ```
 
-The system prompt instructs the model to return only the raw shell command — no explanation, no markdown, no backticks. If the request can't be expressed as a shell command, it returns an error instead of guessing.
+If `autoRun` is enabled, steps 6–7 are skipped and the command runs immediately.
+
+The system prompt instructs the model to return only the raw shell command — no explanation, no markdown, no backticks — and is scoped to your configured shell and OS so the output is always compatible with your environment. If the request can't be expressed as a shell command, it returns an error instead of guessing.
 
 ---
 
 ## History
 
-If `history` is enabled in your config, every confirmed command is saved to `~/.config/lemme/history.json`:
+If `history` is enabled in your config, every successfully completed command is saved to `~/.config/lemme/history.json` (up to 100 entries; oldest are dropped automatically):
 
 ```json
 [
@@ -157,6 +159,8 @@ View it anytime with:
 lemme history
 ```
 
+Timestamps are displayed as relative time (`just now`, `5m ago`, `3h ago`, `yesterday`, `4d ago`).
+
 ---
 
 ## Requirements
@@ -168,4 +172,4 @@ lemme history
 
 ## License
 
-MIT © [arii.dev](https://arii.dev)
+MIT © Arian Najafi Yamchelo — [arii.dev](https://arii.dev)
