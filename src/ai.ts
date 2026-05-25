@@ -5,26 +5,32 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import chalk from "chalk";
 import { type Config } from "./config.js";
 
-const SYSTEM_PROMPT = `You are a shell command expert.
+function buildSystemPrompt(shell: string, os: string): string {
+  return `You are a shell command expert.
 The user will describe what they want to do in natural language.
 Respond with ONLY the exact shell command to run, nothing else.
 No explanations, no markdown, no backticks, just the raw command.
+The user is on ${os} using the ${shell} shell — generate commands compatible with that environment.
 If the request is ambiguous or cannot be expressed as a shell command, respond with: ERROR: <reason>`;
+}
 
 export async function getCommand(
   query: string,
   config: Config,
 ): Promise<string> {
+  const systemPrompt = buildSystemPrompt(config.shell, config.os);
   try {
     switch (config.provider) {
       case "claude":
-        return await askClaude(query, config);
+        return await askClaude(query, config, systemPrompt);
       case "openai":
-        return await askOpenAI(query, config);
+        return await askOpenAI(query, config, systemPrompt);
       case "groq":
-        return await askGroq(query, config);
+        return await askGroq(query, config, systemPrompt);
       case "gemini":
-        return await askGemini(query, config);
+        return await askGemini(query, config, systemPrompt);
+      default:
+        return `ERROR: Unknown provider '${(config as Config).provider}'`;
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
@@ -33,51 +39,51 @@ export async function getCommand(
   }
 }
 
-async function askClaude(query: string, config: Config): Promise<string> {
+async function askClaude(query: string, config: Config, systemPrompt: string): Promise<string> {
   const client = new Anthropic({ apiKey: config.apiKey });
   const response = await client.messages.create({
     model: config.model,
     max_tokens: 256,
-    system: SYSTEM_PROMPT,
+    system: systemPrompt,
     messages: [{ role: "user", content: query }],
   });
   const block = response.content[0];
-  if (!block || block.type !== "text") return "";
+  if (!block || block.type !== "text") return "ERROR: No text response from AI";
   return block.text.trim();
 }
 
-async function askOpenAI(query: string, config: Config): Promise<string> {
+async function askOpenAI(query: string, config: Config, systemPrompt: string): Promise<string> {
   const client = new OpenAI({ apiKey: config.apiKey });
   const response = await client.chat.completions.create({
     model: config.model,
     max_tokens: 256,
     messages: [
-      { role: "system", content: SYSTEM_PROMPT },
+      { role: "system", content: systemPrompt },
       { role: "user", content: query },
     ],
   });
-  return response.choices[0]?.message?.content?.trim() ?? "";
+  return response.choices[0]?.message?.content?.trim() ?? "ERROR: No text response from AI";
 }
 
-async function askGroq(query: string, config: Config): Promise<string> {
+async function askGroq(query: string, config: Config, systemPrompt: string): Promise<string> {
   const client = new Groq({ apiKey: config.apiKey });
   const response = await client.chat.completions.create({
     model: config.model,
     max_tokens: 256,
     messages: [
-      { role: "system", content: SYSTEM_PROMPT },
+      { role: "system", content: systemPrompt },
       { role: "user", content: query },
     ],
   });
-  return response.choices[0]?.message?.content?.trim() ?? "";
+  return response.choices[0]?.message?.content?.trim() ?? "ERROR: No text response from AI";
 }
 
-async function askGemini(query: string, config: Config): Promise<string> {
+async function askGemini(query: string, config: Config, systemPrompt: string): Promise<string> {
   const client = new GoogleGenerativeAI(config.apiKey);
   const model = client.getGenerativeModel({
     model: config.model,
-    systemInstruction: SYSTEM_PROMPT,
+    systemInstruction: systemPrompt,
   });
   const response = await model.generateContent(query);
-  return response.response.text().trim();
+  return response.response.text().trim() || "ERROR: No text response from AI";
 }
